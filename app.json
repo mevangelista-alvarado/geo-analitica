@@ -1,0 +1,54 @@
+{
+  "name": "geometria analitica",
+  "description": "Servidor de examenes aleatorios",
+  "stack": "heroku-18",
+  "env": {
+    "DEBUG_STATE": {
+      "required": true
+    },
+    "PRODUCTION": {
+      "required": true
+    },
+    "ALLOWED_HOSTS": {
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "required": true
+    },
+    "PRIVATE_KEY_ID": {
+      "required": true
+    },
+    "PRIVATE_KEY": {
+      "required": true
+    },
+    "CLIENT_ID": {
+      "required": true
+    },
+    "CLIENT_X509_CART_URL": {
+      "required": true
+    },
+    "CLIENT_EMAIL": {
+      "required": true
+    },
+    "PROJECT_ID": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "9.5"
+      }
+    }
+  ]
+}
