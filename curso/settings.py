@@ -20,42 +20,31 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-try:
-    # PRODUCTION = False (DEV)
-    PRODUCTION = ast.literal_eval(os.getenv('PRODUCTION'))
-except:
-    # PRODUCTION = True
-    PRODUCTION = ast.literal_eval(os.environ['PRODUCTION'])
 
+# PRODUCTION = False (DEV)
+PRODUCTION = ast.literal_eval(os.getenv('PRODUCTION'))
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY')
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = ast.literal_eval(os.getenv('DEBUG_STATE'))
 
 # Change allowed hosts accordingly
 if PRODUCTION:
-    # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = os.environ['SECRET_KEY']
     ALLOWED_HOSTS = [os.environ['ALLOWED_HOSTS']]
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = ast.literal_eval(os.environ['DEBUG_STATE'])
-    PRIVATE_KEY_ID = os.environ['PRIVATE_KEY_ID']
-    PRIVATE_KEY = os.environ['PRIVATE_KEY']
-    CLIENT_ID = os.environ['CLIENT_ID']
-    CLIENT_X509_CART_URL = os.environ['CLIENT_X509_CART_URL']
-    CLIENT_EMAIL = os.environ['CLIENT_EMAIL']
-    PROJECT_ID = os.environ['PROJECT_ID']
 else:
-    # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = os.getenv('SECRET_KEY')
-    ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = ast.literal_eval(os.getenv('DEBUG_STATE'))
     ALLOWED_HOSTS = [
         os.getenv('HEROKU_APP_NAME') + ".herokuapp.com",
         "127.0.0.1", 'localhost', ]
-    PRIVATE_KEY_ID = os.getenv('PRIVATE_KEY_ID')
-    PRIVATE_KEY = os.getenv('PRIVATE_KEY')
-    CLIENT_ID = os.getenv('CLIENT_ID')
-    CLIENT_X509_CART_URL = os.getenv('CLIENT_X509_CART_URL')
-    CLIENT_EMAIL = os.getenv('CLIENT_EMAIL')
-    PROJECT_ID = os.getenv('PROJECT_ID')
+
+
+PRIVATE_KEY_ID = os.getenv('PRIVATE_KEY_ID')
+PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_X509_CART_URL = os.getenv('CLIENT_X509_CART_URL')
+CLIENT_EMAIL = os.getenv('CLIENT_EMAIL')
+PROJECT_ID = os.getenv('PROJECT_ID')
 
 
 
@@ -104,14 +93,37 @@ WSGI_APPLICATION = 'curso.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+"""
+if BUILD_ON_TRAVIS:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'travis_ci',
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': '127.0.0.1',
+        }
+    }
+else:
+    DATABASE_URL = os.environ['DATABASE_URL']
+    DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
 
+    DATABASES['default'].update({
+        'ENGINE': 'django_db_geventpool.backends.postgresql_psycopg2',
+        'ATOMIC_REQUESTS': False,
+        'CONN_MAX_AGE': 0,
+        'OPTIONS': {
+            # MAX CONNS * N_WORKERS = TOTAL DB CONNECTIONS
+            'MAX_CONNS': int(os.environ['DATABASE_MAX_CONNS'])
+        }
+    })
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

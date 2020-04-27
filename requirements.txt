@@ -1,6 +1,7 @@
-django
-jsonfield
-sympy
+# Django
+Django
+
+# google
 antlr4-python3-runtime
 gspread
 oauth2client
@@ -8,5 +9,24 @@ google-api-python-client
 google-auth
 google-auth-httplib2
 google-auth-oauthlib
+
+# Django utils
+jsonfield
+
+# Util
+sympy
 python-dotenv
-gunicorn
+
+# heroku requirements
+dj-database-url==0.5.0
+gunicorn==19.9.0
+whitenoise==2.0.6
+
+# Database
+psycopg2-binary==2.8.2
+
+# Gunicorn performance
+django-db-geventpool==3.1.0
+psycogreen==1.0.1
+gevent==1.4.0
+greenlet==0.4.15
