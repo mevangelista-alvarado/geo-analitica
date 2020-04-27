@@ -20,33 +20,46 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
+try:
+    # PRODUCTION = False (DEV)
+    PRODUCTION = ast.literal_eval(os.getenv('PRODUCTION'))
+except:
+    # PRODUCTION = True
+    PRODUCTION = ast.literal_eval(os.environ['PRODUCTION'])
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = ast.literal_eval(os.getenv('DEBUG_STATE'))
-# PRODUCTION
-PRODUCTION = ast.literal_eval(os.getenv('PRODUCTION'))
 
 # Change allowed hosts accordingly
 if PRODUCTION:
-    ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = os.environ['SECRET_KEY']
+    ALLOWED_HOSTS = [os.environ['ALLOWED_HOSTS']]
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = ast.literal_eval(os.environ['DEBUG_STATE'])
+    PRIVATE_KEY_ID = os.environ['PRIVATE_KEY_ID']
+    PRIVATE_KEY = os.environ['PRIVATE_KEY']
+    CLIENT_ID = os.environ['CLIENT_ID']
+    CLIENT_X509_CART_URL = os.environ['CLIENT_X509_CART_URL']
+    CLIENT_EMAIL = os.environ['CLIENT_EMAIL']
+    PROJECT_ID = os.environ['PROJECT_ID']
 else:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = ast.literal_eval(os.getenv('DEBUG_STATE'))
     ALLOWED_HOSTS = [
         os.getenv('HEROKU_APP_NAME') + ".herokuapp.com",
         "127.0.0.1", 'localhost', ]
+    PRIVATE_KEY_ID = os.getenv('PRIVATE_KEY_ID')
+    PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+    CLIENT_ID = os.getenv('CLIENT_ID')
+    CLIENT_X509_CART_URL = os.getenv('CLIENT_X509_CART_URL')
+    CLIENT_EMAIL = os.getenv('CLIENT_EMAIL')
+    PROJECT_ID = os.getenv('PROJECT_ID')
 
 
-PRIVATE_KEY_ID = os.getenv('PRIVATE_KEY_ID')
-PRIVATE_KEY = os.getenv('PRIVATE_KEY')
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_X509_CART_URL = os.getenv('CLIENT_X509_CART_URL')
-CLIENT_EMAIL = os.getenv('CLIENT_EMAIL')
-PROJECT_ID = os.getenv('PROJECT_ID')
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
