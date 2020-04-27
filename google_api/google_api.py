@@ -11,15 +11,15 @@ from django.conf import settings
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 googleapi = {
     "type": "service_account",
-    "project_id": settings.PROJECT_ID,
-    "private_key_id": settings.PRIVATE_KEY_ID,
-    "private_key": settings.PRIVATE_KEY,
-    "client_email": settings.CLIENT_EMAIL,
-    "client_id": settings.CLIENT_ID,
+    "project_id": settings.GOOGLE_PROJECT_ID,
+    "private_key_id": settings.GOOGLE_PRIVATE_KEY_ID,
+    "private_key": settings.GOOGLE_PRIVATE_KEY,
+    "client_email": settings.GOOGLE_CLIENT_EMAIL,
+    "client_id": settings.GOOGLE_CLIENT_ID,
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": settings.CLIENT_X509_CART_URL
+    "client_x509_cert_url": settings.GOOGLE_CLIENT_X509_CART_URL
 }
 
 with TempD() as tmpdir:
@@ -79,7 +79,7 @@ def agregar_calificacion(tema, cuenta, calif, tiempo, preguntas):
     sheet = client.open("curso_test").worksheet(tema)
     cuentas = sheet.col_values(1)
     ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
-    for i in range(1, 25):#[1,2,3,4,5,6,7,8,9,10,11,12,13]:  #,13,14,15,16,17,18,19]:
+    for i in range(1, 25):
         if i == 1:
             # Cuenta
             sheet.update_cell(ctas_ultima_posicion + 2, i, cuenta)

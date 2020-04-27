@@ -27,7 +27,6 @@ PRODUCTION = ast.literal_eval(os.getenv('PRODUCTION'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ast.literal_eval(os.getenv('DEBUG_STATE'))
 
@@ -40,12 +39,12 @@ else:
         "127.0.0.1", 'localhost', ]
 
 
-PRIVATE_KEY_ID = os.getenv('PRIVATE_KEY_ID')
-PRIVATE_KEY = os.getenv('PRIVATE_KEY')
-CLIENT_ID = os.getenv('CLIENT_ID')
-CLIENT_X509_CART_URL = os.getenv('CLIENT_X509_CART_URL')
-CLIENT_EMAIL = os.getenv('CLIENT_EMAIL')
-PROJECT_ID = os.getenv('PROJECT_ID')
+GOOGLE_PRIVATE_KEY_ID = os.getenv('GOOGLE_PRIVATE_KEY_ID')
+GOOGLE_PRIVATE_KEY = os.getenv('GOOGLE_PRIVATE_KEY')
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_X509_CART_URL = os.getenv('GOOGLE_CLIENT_X509_CART_URL')
+GOOGLE_CLIENT_EMAIL = os.getenv('GOOGLE_CLIENT_EMAIL')
+GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID')
 
 
 
