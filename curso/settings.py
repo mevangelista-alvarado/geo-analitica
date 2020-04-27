@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import ast
+import dj_database_url
 from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
@@ -93,37 +94,26 @@ WSGI_APPLICATION = 'curso.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-"""
-if BUILD_ON_TRAVIS:
+if not PRODUCTION:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'travis_ci',
-            'USER': 'postgres',
-            'PASSWORD': '',
-            'HOST': '127.0.0.1',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
 else:
-    DATABASE_URL = os.environ['DATABASE_URL']
-    DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
-
-    DATABASES['default'].update({
-        'ENGINE': 'django_db_geventpool.backends.postgresql_psycopg2',
-        'ATOMIC_REQUESTS': False,
-        'CONN_MAX_AGE': 0,
-        'OPTIONS': {
-            # MAX CONNS * N_WORKERS = TOTAL DB CONNECTIONS
-            'MAX_CONNS': int(os.environ['DATABASE_MAX_CONNS'])
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'djangogirls',
+            'USER': 'name',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
         }
-    })
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

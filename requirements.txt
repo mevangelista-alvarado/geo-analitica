@@ -12,6 +12,7 @@ google-auth-oauthlib
 
 # Django utils
 jsonfield
+dj-database-url
 
 # Util
 sympy
@@ -21,11 +22,9 @@ python-dotenv
 dj-database-url==0.5.0
 gunicorn==19.9.0
 whitenoise==2.0.6
-psycopg2
+psycopg2==2.6.2
 django-heroku
 
-# Database
-# psycopg2-binary==2.8.2
 
 # Gunicorn performance
 django-db-geventpool==3.1.0
