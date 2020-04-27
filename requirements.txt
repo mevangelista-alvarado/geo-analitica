@@ -21,12 +21,15 @@ python-dotenv
 dj-database-url==0.5.0
 gunicorn==19.9.0
 whitenoise==2.0.6
+psycopg2
+django-heroku
 
 # Database
-psycopg2-binary==2.8.2
+# psycopg2-binary==2.8.2
 
 # Gunicorn performance
 django-db-geventpool==3.1.0
 psycogreen==1.0.1
 gevent==1.4.0
 greenlet==0.4.15
+
