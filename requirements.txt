@@ -12,7 +12,6 @@ google-auth-oauthlib
 
 # Django utils
 jsonfield
-dj-database-url
 
 # Util
 sympy
