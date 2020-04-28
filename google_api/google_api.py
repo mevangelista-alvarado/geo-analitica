@@ -76,7 +76,7 @@ def agregar_calificacion(tema, cuenta, calif, tiempo, preguntas):
     if cuenta in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
         tema = 'test'
 
-    sheet = client.open("curso_test").worksheet(tema)
+    sheet = client.open("Geometria-Analitica-II").worksheet(tema)
     cuentas = sheet.col_values(1)
     ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
     for i in range(1, 25):
