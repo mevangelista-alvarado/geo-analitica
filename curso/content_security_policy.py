@@ -17,6 +17,7 @@ CSP_DEFAULT_SRC = (
 
 CSP_SCRIPT_SRC = CSP_DEFAULT_SRC + (
     "code.jquery.com",
-    "cdn.mathjax.org",
     "ajax.googleapis.com",
+    "polyfill.io",
+    "cdn.jsdelivr.net",
 )
