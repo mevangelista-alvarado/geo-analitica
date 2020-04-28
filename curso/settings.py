@@ -16,6 +16,9 @@ import dj_database_url
 from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
+from .content_security_policy import CSP_DEFAULT_SRC, CSP_SCRIPT_SRC
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
