@@ -93,7 +93,7 @@ def familia_ortogonales(pregunta):
 def quiz_1(pregunta, dependiente='dependiente'):
     """"""
     x, y = sympy.symbols('x y')
-    eq = -x -sympy.sqrt(2)*y - sympy.Rational(24, 12)
+    eq = -sympy.sqrt(2)*y + 2 - sympy.Rational(7, 5)*x
     pregunta = pregunta.replace('ecuacion', str(eq))
     return pregunta
 
@@ -166,12 +166,16 @@ def familia_ortogonales_html(pregunta):
     return pregunta
 
 def quiz_1_html(pregunta):
+    """
     final = pregunta.rfind("$")
     antefinal = pregunta[0:final-1].rfind("$")
 
     sympy_obj = sympy.sympify(pregunta[antefinal+1:final])
     sympy_latex = sympy.latex(sympy_obj)
     pregunta_html = f"{pregunta[0: antefinal]} ${sympy_latex}= 0$ {pregunta[final+1:]}"
+    return pregunta_html
+    """
+    pregunta_html = "Introduzca de manera adecuada los coeficientes de la siguiente ecuación en los bloques correspondientes: $\\sqrt{2}y + 2 − \\frac{7x}{5} = 0$ ($\\textbf{NOTA}:$ Recuerde, de ser necesario, cambiar los signos a la ecuación para que el coeficinte de la variable $x$ sea un número positivo)"
     return pregunta_html
 
 def quiz_2_html(pregunta):
@@ -190,7 +194,7 @@ def quiz_2_html(pregunta):
     # Pregunta html
     pregunta_html = f"{pregunta[0:antefinal]} ${punto_latex}$"
     """
-    pregunta_html = "Simplifique lo siguiente: $ (\\frac{8}{12}, \\frac{\\sqrt{32}}{8}, -1)$"
+    pregunta_html = "Simplifique las entradas del vector $\\big(\\frac{8}{12}, \\frac{\\sqrt{32}}{8}, -1\\big)$ e ingrese tales valores en las casillas correspondientes (respetando el orden natural de los índices)"
     return pregunta_html
 
 pregunta_html = {
@@ -250,7 +254,7 @@ def plano_tangente_opcional():
 
 def quiz_1_options():
     """"""
-    return ["Respuesta: x", "+ y", "+", "="], False
+    return ["Respuesta:", "x +", "y +", "z +", "="], False
 
 def quiz_2_options():
     """"""
@@ -296,9 +300,10 @@ def custom_quiz1_respuesta_html(array):
     """"""
     x = sympy.latex(sympy.sympify(array[0]))
     y = sympy.latex(sympy.sympify(array[1]))
-    c = sympy.latex(sympy.sympify(array[2]))
-    cc = sympy.latex(sympy.sympify(array[3]))
-    return f'$({x})x +({y})y +({c})= {cc}$'
+    z = sympy.latex(sympy.sympify(array[2]))
+    c = sympy.latex(sympy.sympify(array[3]))
+    zero = sympy.latex(sympy.sympify(array[4]))
+    return f'$({x})x +({y})y + ({z})z + ({c})= {zero}$'
 
 
 def custom_quiz2_respuesta_html(array):

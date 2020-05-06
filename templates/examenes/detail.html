@@ -8,23 +8,33 @@
         <h1>Geometría Analítica</h1>
     </div>
     <div id="examen_tiempo" class="center" style="visibility:hidden;">
-        <div> TIEMPO </div>
-        <div id="cronometro">00 : 00 : 00</div>
+        <!--<FONT SIZE=5> TIEMPO </font>-->
+        <FONT SIZE=7 id="cronometro">00 : 00 : 00</font>
     </div>
 
     <div id="tiempo_regresivo" class="center" >
-        El tiempo para hacer el examen comenzará en <h2 style="color:yellow;"><span id="cuentaRegresiva"></span></h2> minutos.
+        El examen comenzará en: <h2 style="color:yellow;"><span id="cuentaRegresiva"></span></h2>
     </div>
-
     <div>
-        <h3>Indicaciones</h3>
+        <h3>Indicaciones Generales</h3>
         <ol>
-            <li>Si necesitas ingresar funciones especiales(trigonométricas) recuerda hacer lo siguiente: $cos(4)$ = cos(4), $sen(4)$ = sin(4) o $\sqrt{2}$ = sqrt(2) por ejemplo.</li>
-            <li>Para ingresar una fracción debes hacerlo de la siguiente manera: $\frac{1}{\sqrt{2}}$ = 1/sqrt(2).</li>
+            <li>Tener a la mano tu <strong>Número de Cuenta.</strong></li>
+            <li>Tienes 50 minutos para resolver 5 problemas sencillos.</li>
+            <!-- <li>Después de los 50 minutos la página se actuliza generando un nuevo examen.</li> -->
+            <li>No dejar casillas vacías.</li>
+            <li>Una vez enviado el Quiz no podrás realizar modificaciones.</li>
+            <li>No utilizar aproximaciones decimales en tus cálculos.</li>
+        </ol>
+        <h3>Sintaxis</h3>
+        <ol>
+            <li>Para ingresar un producto, por ejemplo, $(2)(3)=2\times 3=2\cdot 3$, debes escribir lo siguiente: 2*3 ó 3*2 (sintaxis de python).</li>
+            <li>Para ingresar un número negativo, por ejemplo, $-4 = (-1)(4) = -1\cdot 4$, debes escribir lo siguiente: -4 ó -1*4 ó (-1)*4 (sintaxis de python).</li>
+            <li>Para ingresar una fracción, por ejemplo, $\frac{1}{2}$, debes escribir lo siguiente: 1/2 (sintaxis de python).</li>
+            <li>Para ingresar una raíz cuadrada, por ejemplo, $\sqrt{2}$, debes escribir lo siguiente: sqrt(2) (sintaxis de python).</li>
+            <li>Puedes utilizar cualquier combinación válida de todas las anteriores</li>
+            <!--<li>Si necesitas ingresar funciones especiales(trigonométricas) recuerda hacer lo siguiente: $cos(4)$ = cos(4), $sen(4)$ = sin(4) o $\sqrt{2}$ = sqrt(2) por ejemplo.</li>
             <li> Para números, funciones o fracciones negativas son válidas las siguientes opciones:
-            $\sqrt{2}$ = -sqrt(2), $\sqrt{2}$ = -1*sqrt(2) o $-\frac{1}{\sqrt{2}}$ = -1/sqrt(2).</li>
-            <li>Tienes 50 minutos para resolver 5 problemas</li>
-            <li>Después de los 50 minutos la página se actuliza generando un nuevo examen.</li>
+            $\sqrt{2}$ = -sqrt(2), $\sqrt{2}$ = -1*sqrt(2) o $-\frac{1}{\sqrt{2}}$ = -1/sqrt(2).</li>-->
         </ol>
     </div>
     <form id="formEjemplo" method='POST' action="{% url 'check_examen' %}" >

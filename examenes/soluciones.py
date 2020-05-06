@@ -70,12 +70,12 @@ def superficies_regladas(pregunta, html=False):
 def quiz1(pregunta, html=False):
     """"""
     x, y, z = sympy.symbols('x y z')
-    eq = -x -sympy.sqrt(2)*y - sympy.Rational(24, 12)
+    eq = -sympy.Rational(7, 5)*x + sympy.sqrt(2)*y + 2
     cc = 0
     if html:
-        return f'${sympy.latex(eq)} = {cc}$'
+        return f'${sympy.latex((-1)*eq)} = {cc}$'
     else:
-        return [-1, -sympy.sqrt(2), - sympy.Rational(24, 12), 0]
+        return [sympy.Rational(7, 5), -sympy.sqrt(2), 0, -2, 0]
 
 def quiz2(pregunta, html=False):
     """"""
