@@ -26,16 +26,53 @@
         $("#cronometro").html(time);
     };
     // Ejecuta la funcion start al cargarce la pagina
-    window.onload=start;
+    // window.onload=start;
 
     //Función para actualizar cada n segundos(1s = 1000 milisegundos)
     function actualizar(){location.reload(true);}
-    setInterval("actualizar()", 50*60*1000);
+    // setInterval("actualizar()", 40*1000);// + 10 (Por el que cuenta hacia atras)
 </script>
+
 <script>
-    $('#enviar_examen').click(function() {
-        let cronometro = $('#cronometro').text();
-        $('#cronometro_form').attr("value", cronometro);
+    // Número de segundos a contar
+    var segundos = 10; //120
+    function secondPassed() {
+        var minutos = Math.round(segundos/60); // calcula el número de minutos
+        var segundosRestantes = segundos % 60; // calcula los segundos
+        // Si los segundos usan sólo un dígito, añadimos un cero a la izq
+        if (segundosRestantes < 10) {
+            segundosRestantes = "0" + segundosRestantes;
+        }
+        var time = minutos + ":" + segundosRestantes;
+        $('#cuentaRegresiva').html(time);
+        if (segundos == 0) {
+            clearInterval(cuentaRegresivaTiempo);
+            $("#tiempo_regresivo").css('visibility', 'hidden');
+            $("#examen_tiempo").css('visibility', 'visible');
+            // Inicia el cronometro del examen
+            start();
+            setInterval("actualizar()", 30*1000);
+        } else {
+            segundos--;
+        }
+    };
+    // window.onload=secondPassed;
+    // TODO FIX
+    var cuentaRegresivaTiempo = setInterval(secondPassed, 1000);
+</script>
+
+<script>
+    let a = false
+    $('#enviar_examen').one('click', function() {
+        if (a) {
+            //pass
+        } else {
+            a = true;
+            let cronometro = $('#cronometro').text();
+            $('#cronometro_form').attr("value", cronometro);
+            console.log('This will be displayed only once.')
+            $('#formEjemplo').submit();
+        }
     });
 </script>
 

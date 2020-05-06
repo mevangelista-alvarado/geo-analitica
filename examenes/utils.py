@@ -23,11 +23,11 @@ def calificacion_final(array):
         if index != 4:
             sum_aux_calificacion = sum_aux_calificacion + array[index]
 
-    partial_calificacion = regla_de_tres(sum_calificacion)
+    partial_calificacion = regla_de_tres(sum_aux_calificacion)
     if partial_calificacion == "10":
         return partial_calificacion
     else:
-        return regla_de_tres(sum_aux_calificacion)
+        return regla_de_tres(sum_calificacion)
 
 
 def regla_de_tres(partial_calificacion):
@@ -90,12 +90,30 @@ def familia_ortogonales(pregunta):
     """"""
     return pregunta
 
+def quiz_1(pregunta, dependiente='dependiente'):
+    """"""
+    x, y = sympy.symbols('x y')
+    eq = -x -sympy.sqrt(2)*y - sympy.Rational(24, 12)
+    pregunta = pregunta.replace('ecuacion', str(eq))
+    return pregunta
+
+def quiz_2(pregunta, dependiente='dependiente'):
+    """"""
+    x0 = sympy.Rational(2, 3)*sympy.Rational(4, 4)
+    y0 = sympy.Rational(1, 8)*sympy.sqrt(32)
+    z0 = -1
+    pregunta = pregunta.replace('x0', f'{x0}')
+    pregunta = pregunta.replace('y0', f'{y0}')
+    pregunta = pregunta.replace('z0', f'{z0}')
+    return pregunta
 
 crear_pregunta = {
     "default": replace_random_int,
     "superficies_regladas": superficies_regladas,
     "plano_tangente": plano_tangente,
     "familia_ortogonales": familia_ortogonales,
+    "ecuacion1": quiz_1,
+    "ecuacion2": quiz_2,
 }
 
 # Funciones para obtener una pregunta en formato html
@@ -119,7 +137,7 @@ def superficies_regladas_html(pregunta):
 
     sympy_obj = sympy.sympify(pregunta[antefinal+1:final])
     sympy_latex = sympy.latex(sympy_obj)
-    pregunta_html = f"{pregunta[0: antefinal]} ${sympy_latex}$ {pregunta[final+1:]}"
+    pregunta_html = f"{pregunta[0: antefinal]} ${sympy_latex}$ {pregunta[final+1:]} $= 0$"
     return pregunta_html
 
 def plano_tangente_html(pregunta):
@@ -147,11 +165,41 @@ def familia_ortogonales_html(pregunta):
     """"""
     return pregunta
 
+def quiz_1_html(pregunta):
+    final = pregunta.rfind("$")
+    antefinal = pregunta[0:final-1].rfind("$")
+
+    sympy_obj = sympy.sympify(pregunta[antefinal+1:final])
+    sympy_latex = sympy.latex(sympy_obj)
+    pregunta_html = f"{pregunta[0: antefinal]} ${sympy_latex}= 0$ {pregunta[final+1:]}"
+    return pregunta_html
+
+def quiz_2_html(pregunta):
+    """"""
+    """
+    # Punto
+    final_punto = pregunta.rfind("$")
+    antefinal = pregunta[0:final_punto-1].rfind("$")
+    punto = pregunta[antefinal+1:final_punto].strip().split(",")
+    punto_latex_aux = []
+    for elemento in punto:
+        sympy_obj = sympy.sympify(elemento)
+        punto_latex_aux.append(sympy.latex(sympy_obj))
+
+    punto_latex = f'({punto_latex_aux[0]}, {punto_latex_aux[1]}, {punto_latex_aux[2]})'
+    # Pregunta html
+    pregunta_html = f"{pregunta[0:antefinal]} ${punto_latex}$"
+    """
+    pregunta_html = "Simplifique lo siguiente: $ (\\frac{8}{12}, \\frac{\\sqrt{32}}{8}, -1)$"
+    return pregunta_html
+
 pregunta_html = {
     "default": obtener_formato_html,
     "superficies_regladas": superficies_regladas_html,
     "plano_tangente": plano_tangente_html,
     "familia_ortogonales": familia_ortogonales_html,
+    "ecuacion1": quiz_1_html,
+    "ecuacion2": quiz_2_html,
 }
 
 # Funciones para crear respuestas random
@@ -169,18 +217,44 @@ def matriz2x2_options(matriz):
             [random.randint(-3, 3), random.randint(-3, 3)],
             [random.randint(-3, 3), random.randint(-3, 3)]
         ])
-        respuestas.append(f"${sympy.latex(matriz + random_matriz)}$")
+        result = matriz + random_matriz
+        respuestas.append(f"${sympy.latex(result)}$")
+        i = i + 1
+
+    return random_array(respuestas), True
+
+def transpuesta_options(matriz):
+    """"""
+    respuestas = list()
+    respuestas.append(f"${sympy.latex(matriz)}$")
+    i = 0
+    while i < 3:
+        random_matriz = sympy.Matrix([
+            [random.randint(-3, 3), random.randint(-3, 3), random.randint(-3, 3)],
+            [random.randint(-3, 3), random.randint(-3, 3), random.randint(-3, 3)],
+            [random.randint(-3, 3), random.randint(-3, 3), random.randint(-3, 3)]
+        ])
+        result = matriz + random_matriz
+        respuestas.append(f"${sympy.latex(result)}$")
         i = i + 1
 
     return random_array(respuestas), True
 
 def superficies_regladas_opcional():
     """"""
-    return ["Respuesta 1: (", ",", ",", ") + t(", ",", ",", ").", "break", "Respuesta 2: (", ",", ",", ") + t(", ",", ",", ")."], False
+    return ["Respuesta 1: (", ",", ",", ") + t (", ",", ",", ").", "break", "Respuesta 2: (", ",", ",", ") + t (", ",", ",", ")."], False
 
 def plano_tangente_opcional():
     """"""
     return ["Respuesta: 0 = x", "+ y", "+ z", "+"], False
+
+def quiz_1_options():
+    """"""
+    return ["Respuesta: x", "+ y", "+", "="], False
+
+def quiz_2_options():
+    """"""
+    return ["Respuesta: (", ",", ",", ")."], False
 
 def familia_ortogonales_opcional():
     """"""
@@ -195,6 +269,9 @@ respuesta_opcional = {
     "superficies_regladas": superficies_regladas_opcional,
     "plano_tangente": plano_tangente_opcional,
     "familia_ortogonales": familia_ortogonales_opcional,
+    "transpuesta_options": transpuesta_options,
+    "ecuacion1": quiz_1_options,
+    "ecuacion2": quiz_2_options,
 }
 
 def custom_respuesta_html(array):
@@ -215,8 +292,27 @@ def custom_plano_tangente_html(array):
 
     return f'$({x})x +({y})y +({z})z +({c})= 0$'
 
+def custom_quiz1_respuesta_html(array):
+    """"""
+    x = sympy.latex(sympy.sympify(array[0]))
+    y = sympy.latex(sympy.sympify(array[1]))
+    c = sympy.latex(sympy.sympify(array[2]))
+    cc = sympy.latex(sympy.sympify(array[3]))
+    return f'$({x})x +({y})y +({c})= {cc}$'
+
+
+def custom_quiz2_respuesta_html(array):
+    """"""
+    x = sympy.latex(sympy.sympify(array[0]))
+    y = sympy.latex(sympy.sympify(array[1]))
+    z = sympy.latex(sympy.sympify(array[2]))
+
+    return f'$({x}, {y}, {z})$'
+
 custom_alumno_respuesta = {
     "superficies_regladas": custom_respuesta_html,
     "plano_tangente": custom_plano_tangente_html,
+    "ecuacion1": custom_quiz1_respuesta_html,
+    "ecuacion2": custom_quiz2_respuesta_html,
 }
 

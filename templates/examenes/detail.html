@@ -7,11 +7,15 @@
     <div>
         <h1>Geometría Analítica</h1>
     </div>
-    <div class="center">
+    <div id="examen_tiempo" class="center" style="visibility:hidden;">
         <div> TIEMPO </div>
         <div id="cronometro">00 : 00 : 00</div>
     </div>
-    
+
+    <div id="tiempo_regresivo" class="center" >
+        El tiempo para hacer el examen comenzará en <h2 style="color:yellow;"><span id="cuentaRegresiva"></span></h2> minutos.
+    </div>
+
     <div>
         <h3>Indicaciones</h3>
         <ol>
@@ -89,7 +93,7 @@
         </div>
         <p></p>
         <div>
-            <button id="enviar_examen" type="submit" class="save btn btn-default">Enviar Examen</button>
+            <button id="enviar_examen" type="button" class="save btn btn-default">Enviar Examen</button>
         </div>
     </form>
 

@@ -19,6 +19,15 @@ def inversa_matriz(pregunta, html=False):
         # TODO "NO EXISTE INVERSA"
         return zero if not html else "Sin inversa"
 
+def transpuesta(pregunta, html=False):
+    """"""
+    inicio = pregunta.find("$")
+    final = pregunta.rfind("$")
+    sympy_str = ast.literal_eval(pregunta[inicio+1:final])
+    sympy_obj = sympy.Matrix(sympy_str)
+    
+    return sympy_obj.transpose() if not html else f"${sympy.latex(sympy_obj.transpose())}$"
+
 def determinate(pregunta, html=False):
     """"""
     inicio = pregunta.find("$")
@@ -26,6 +35,14 @@ def determinate(pregunta, html=False):
     sympy_str = ast.literal_eval(pregunta[inicio+1:final])
     sympy_obj = sympy.Matrix(sympy_str)
     return sympy_obj.det() if not html else f"${sympy.latex(sympy_obj.det())}$"
+
+def traza(pregunta, html=False):
+    """"""
+    inicio = pregunta.find("$")
+    final = pregunta.rfind("$")
+    sympy_str = ast.literal_eval(pregunta[inicio+1:final])
+    sympy_obj = sympy.Matrix(sympy_str)
+    return sympy_obj.trace() if not html else f"${sympy.latex(sympy_obj.trace())}$"
 
 def superficies_regladas(pregunta, html=False):
     """"""
@@ -49,6 +66,26 @@ def superficies_regladas(pregunta, html=False):
         return f'$({x0},{y0},{z0}) + t{v1_direccion}$  y   $({x0},{y0},{z0}) + t{v2_direccion}$'
     else:
         return ((x0, y0, z0), v1_direccion, (x0, y0, z0), v2_direccion)
+
+def quiz1(pregunta, html=False):
+    """"""
+    x, y, z = sympy.symbols('x y z')
+    eq = -x -sympy.sqrt(2)*y - sympy.Rational(24, 12)
+    cc = 0
+    if html:
+        return f'${sympy.latex(eq)} = {cc}$'
+    else:
+        return [-1, -sympy.sqrt(2), - sympy.Rational(24, 12), 0]
+
+def quiz2(pregunta, html=False):
+    """"""
+    x0 = sympy.Rational(8, 12)
+    y0 = sympy.sympify("sqrt(32)/8")
+    z0 = -1
+    if html:
+        return f'$({sympy.latex(x0)}, {sympy.latex(y0)}, {sympy.latex(z0)})$'
+    else:
+        return [x0, y0, z0]
 
 def plano_tangente(pregunta, html=False):
     """"""
@@ -87,4 +124,8 @@ respuesta_correcta = {
     "superficies_regladas": superficies_regladas,
     "plano_tangente": plano_tangente,
     "familia_ortogonales": familia_ortogonales,
+    "traza": traza,
+    "transpuesta": transpuesta,
+    "ecuacion1": quiz1,
+    "ecuacion2": quiz2,
 }

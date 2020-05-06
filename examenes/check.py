@@ -23,9 +23,26 @@ def check_inversa_matriz(resp_correcta, alumno_respuesta):
         else:
             return 0
 
+def check_transpuesta_matriz(resp_correcta, alumno_respuesta):
+    """"""
+    """"""
+    sympy_obj = resp_correcta
+    # resp_correcta = sympy_obj.transpose()
+    if alumno_respuesta == f'${sympy.latex(sympy_obj)}$':
+        return 1
+    else:
+        return 0
+
 def check_det_matriz(resp_correcta, alumno_respuesta):
     """"""
-    if int(alumno_respuesta) == int(resp_correcta):
+    if sympy.sympify(alumno_respuesta) - sympy.sympify(resp_correcta) == 0:
+        return 1
+    else:
+        return 0
+
+def check_traza_matriz(resp_correcta, alumno_respuesta):
+    """"""
+    if sympy.sympify(alumno_respuesta) - sympy.sympify(resp_correcta) == 0:
         return 1
     else:
         return 0
@@ -79,6 +96,23 @@ def check_familia_ortogonales(resp_correcta, alumno_respuesta):
     else:
         return 0
 
+def quiz1(resp_correcta, alumno_respuesta):
+    """"""
+    contador = 0
+    for (e1, e2) in zip(resp_correcta, alumno_respuesta):
+        if e1 - sympy.sympify(e2) == 0:
+            contador = contador + 1
+
+    return sympy.Rational(contador, len(resp_correcta))
+
+def quiz2(resp_correcta, alumno_respuesta):
+    """"""
+    contador = 0
+    for (e1, e2) in zip(resp_correcta, alumno_respuesta):
+        if e1 - sympy.sympify(e2) == 0:
+            contador = contador + 1
+
+    return sympy.Rational(contador, len(resp_correcta))
 
 respuesta_correcta_check = {
     "inversa_matriz": check_inversa_matriz,
@@ -86,4 +120,8 @@ respuesta_correcta_check = {
     "superficies_regladas": check_superficies_regladas,
     "plano_tangente": check_plano_tangente,
     "familia_ortogonales": check_familia_ortogonales,
+    "traza": check_traza_matriz,
+    "transpuesta": check_transpuesta_matriz,
+    "ecuacion1": quiz1,
+    "ecuacion2": quiz2,
 }
