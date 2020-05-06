@@ -35,7 +35,7 @@
 
 <script>
     // Número de segundos a contar
-    var segundos = 10; //120
+    var segundos = 240; //120
     function secondPassed() {
         var minutos = Math.round(segundos/60); // calcula el número de minutos
         var segundosRestantes = segundos % 60; // calcula los segundos
@@ -51,7 +51,7 @@
             $("#examen_tiempo").css('visibility', 'visible');
             // Inicia el cronometro del examen
             start();
-            setInterval("actualizar()", 30*1000);
+            setInterval("actualizar()", 50*60*1000);
         } else {
             segundos--;
         }
