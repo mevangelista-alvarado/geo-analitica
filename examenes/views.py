@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponse
 from .models import Examen
-from .utils import pregunta_html, crear_pregunta, calificacion_final, respuesta_opcional, custom_alumno_respuesta
+from .utils import pregunta_html, crear_pregunta, calificacion_final, respuesta_opcional, custom_alumno_respuesta, save_examen_resuelto
 from .soluciones import respuesta_correcta
 from .check import respuesta_correcta_check
 from google_api.google_api import existe_cuenta, google_cuentas, google_cuentas_tema, agregar_calificacion, existe_calificacion
@@ -112,9 +112,16 @@ def check_examen(request):
             google_api_preguntas.append(check_resp)
             calificacion.append(check_resp)
 
+        response, msg_gsheet_api = agregar_calificacion(request.POST['tema'], numero_cuenta, calificacion_final(calificacion), request.POST['tiempo'], google_api_preguntas)
+        print(msg_gsheet_api)
+        save_examen, msg_save_examen = save_examen_resuelto(request.POST['tema'], numero_cuenta, calificacion_final(calificacion), request.POST['tiempo'], google_api_preguntas, response)
+        print(msg_save_examen)
 
-        agregar_calificacion(request.POST['tema'], numero_cuenta, calificacion_final(calificacion), request.POST['tiempo'], google_api_preguntas)
-        return render(request, 'examenes/solucion.html', {'solucion': solucion, "calificacion_final": calificacion_final(calificacion), 'numero_cuenta': numero_cuenta, 'existe_cuenta': existe_cta})
+        context = {'solucion': solucion, "calificacion_final": calificacion_final(calificacion),
+                   'numero_cuenta': numero_cuenta, 'existe_cuenta': existe_cta,
+                   'response': response, 'save_examen': save_examen}
+
+        return render(request, 'examenes/solucion.html', context)
 
 def credits_page(request):
     """"""

@@ -1,6 +1,8 @@
 import random
 import sympy
+import datetime
 import ast
+from .models import ExamenResuelto
 #import re
 
 def random_array(array):
@@ -35,12 +37,11 @@ def regla_de_tres(partial_calificacion):
         partial_calificacion --> x
     """
     partial_calificacion = (partial_calificacion*10)/4
-    if int(partial_calificacion) == 10:
+    if int(partial_calificacion) >= 10:
         return "10"
     else:
         partial_calificacion = float(partial_calificacion)
         return f"{partial_calificacion:.2f}"
-
 
 
 # Funciones para crear una pregunta aleatoria
@@ -321,3 +322,39 @@ custom_alumno_respuesta = {
     "ecuacion2": custom_quiz2_respuesta_html,
 }
 
+# Django method
+def save_examen_resuelto(tema, cuenta, calif, tiempo, preguntas, status):
+    """"""
+    try:
+        date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        #
+        Examen = ExamenResuelto()
+        Examen.tema = tema
+        Examen.numero_cuenta = cuenta
+        Examen.tiempo = date
+        Examen.status_gsheet = str(status)
+        Examen.calificacion = str(calif)
+        Examen.pregunta1 = str(preguntas[0])
+        Examen.respuesta1_correcta = str(preguntas[1])
+        Examen.respuesta1_alumno = str(preguntas[2])
+        Examen.respuesta1_calif = str(preguntas[3])
+        Examen.pregunta2 = str(preguntas[4])
+        Examen.respuesta2_correcta = str(preguntas[5])
+        Examen.respuesta2_alumno = str(preguntas[6])
+        Examen.respuesta2_calif = str(preguntas[7])
+        Examen.pregunta3 = str(preguntas[8])
+        Examen.respuesta3_correcta = str(preguntas[9])
+        Examen.respuesta3_alumno = str(preguntas[10])
+        Examen.respuesta3_calif = str(preguntas[11])
+        Examen.pregunta4 = str(preguntas[12])
+        Examen.respuesta4_correcta = str(preguntas[13])
+        Examen.respuesta4_alumno = str(preguntas[14])
+        Examen.respuesta4_calif = str(preguntas[15])
+        Examen.pregunta5 = str(preguntas[16])
+        Examen.respuesta5_correcta = str(preguntas[17])
+        Examen.respuesta5_alumno = str(preguntas[18])
+        Examen.respuesta5_calif = str(preguntas[19])
+        Examen.save()
+        return (True, f'[INFO] Calificación guardada en la Base de Datos exitosamente a la cuenta {cuenta}')
+    except Exception as e:
+        return (False, f'[ERROR] Al guardar calificación en la Base de Datos a la cuenta {cuenta}, ERROR: {e}')
