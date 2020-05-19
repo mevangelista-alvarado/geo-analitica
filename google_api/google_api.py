@@ -76,24 +76,28 @@ def agregar_calificacion(tema, cuenta, calif, tiempo, preguntas):
     if cuenta in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
         tema = 'test'
 
-    sheet = client.open("Geometria Analitica II").worksheet(tema)
-    cuentas = sheet.col_values(1)
-    ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
-    for i in range(1, 25):
-        if i == 1:
-            # Cuenta
-            sheet.update_cell(ctas_ultima_posicion + 2, i, cuenta)
-        elif i == 2:
-            # Calificacion
-            sheet.update_cell(ctas_ultima_posicion + 2, i, str(calif))
-        elif i == 3:
-            # Fecha
-            date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-            sheet.update_cell(ctas_ultima_posicion + 2, i, date)
-        elif i == 4:
-            # Tiempo
-            sheet.update_cell(ctas_ultima_posicion + 2, i, str(tiempo))
-        else:
-            index = i - 5
-            # Preguntas
-            sheet.update_cell(ctas_ultima_posicion + 2, i, str(preguntas[index]))
+    try:
+        sheet = client.open("Geometria Analitica II").worksheet(tema)
+        cuentas = sheet.col_values(1)
+        ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
+        for i in range(1, 25):
+            if i == 1:
+                # Cuenta
+                sheet.update_cell(ctas_ultima_posicion + 2, i, cuenta)
+            elif i == 2:
+                # Calificacion
+                sheet.update_cell(ctas_ultima_posicion + 2, i, str(calif))
+            elif i == 3:
+                # Fecha
+                date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                sheet.update_cell(ctas_ultima_posicion + 2, i, date)
+            elif i == 4:
+                # Tiempo
+                sheet.update_cell(ctas_ultima_posicion + 2, i, str(tiempo))
+            else:
+                index = i - 5
+                # Preguntas
+                sheet.update_cell(ctas_ultima_posicion + 2, i, str(preguntas[index]))
+        return (True, f'[INFO] Calificación agregada exitosamente a la cuenta {cuenta}')
+    except Exception as e:
+        return (False, f'[ERROR] Al agregar calificación a la cuenta {cuenta}, ERROR: {e}')
