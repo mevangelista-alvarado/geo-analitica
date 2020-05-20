@@ -97,7 +97,8 @@ def plano_tangente(pregunta, html=False):
     punto = pregunta[antefinal+2:final_punto-1].strip().split(",")
     punto_sym = [sympy.sympify(elemento) for elemento in punto]
 
-    P_min_P0 = tuple([punto_sym[0]-x, punto_sym[1]-y, punto_sym[2]-z])
+    # Caso cuando x es Positivo
+    P_min_P0 = tuple([x-punto_sym[0], y-punto_sym[1], z-punto_sym[2]])
 
     # Ecuacion
     inicio = pregunta.find("$")

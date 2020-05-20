@@ -15,7 +15,6 @@ def examenes_list(request):
 
 def examen_detail(request, examen_id):
     """"""
-
     examen_query = Examen.objects.get(id=examen_id)
     preguntas = [pregunta.strip() for pregunta in examen_query.preguntas.split("--")][:-1]
     respuestas = [respuesta.strip() for respuesta in examen_query.respuestas.split("--")][:-1]

@@ -75,7 +75,7 @@ def plano_tangente(pregunta, dependiente='dependiente'):
     constante = sympy.sympify(3)
 
     x0, y0 = sympy.sympify(random.randint(1, 5)), sympy.sympify(random.randint(1, 5))
-    dentro_raiz = constante - x0**2/a**2 - y0**2/c**2
+    dentro_raiz = constante - x0**2/a**2 - y0**2/b**2
     while dentro_raiz < 0:
         x0, y0 = sympy.sympify(random.randint(1, 5)), sympy.sympify(random.randint(1, 5))
         dentro_raiz = constante - x0**2/a**2 - y0**2/b**2
@@ -251,7 +251,7 @@ def superficies_regladas_opcional():
 
 def plano_tangente_opcional():
     """"""
-    return ["Respuesta: 0 = x", "+ y", "+ z", "+"], False
+    return ["Respuesta:", "x +", "y +", "z +", "= 0",], False
 
 def quiz_1_options():
     """"""
@@ -295,7 +295,7 @@ def custom_plano_tangente_html(array):
     z = sympy.latex(sympy.sympify(array[2]))
     c = sympy.latex(sympy.sympify(array[3]))
 
-    return f'$({x})x +({y})y +({z})z +({c})= 0$'
+    return f'$({x})x +({y})y +({z})z +({c}) = 0$'
 
 def custom_quiz1_respuesta_html(array):
     """"""

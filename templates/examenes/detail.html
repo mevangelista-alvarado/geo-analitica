@@ -83,6 +83,11 @@
                                     <input name="{{ pregunta.2}}-{{forloop.counter}}" type="text" value="no_stop_here">
                                 </div>
                                 {{ respuesta }}
+                            {% elif respuesta == "= 0" %}
+                                <div style="display: none;">
+                                    <input name="{{ pregunta.2}}-{{forloop.counter}}" type="text" value="no_stop_here">
+                                </div>
+                                {{ respuesta }}
                             {% else %}
                                 {{ respuesta }}
                                 <input name="{{ pregunta.2}}-{{forloop.counter }}" type="text" required>
