@@ -18,7 +18,7 @@ def examenes_list(request):
 
 def examen_detail(request, examen_id):
     """"""
-    if examen_id == "2":
+    if examen_id == "3":
         template = 'examenes/tema2.html'
         examen = {"tema": "tema 2", "pregunta_base": "", "preguntas": []}
         cuentas_con_calificacion = google_cuentas_tema("tema 2")
