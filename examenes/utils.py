@@ -37,7 +37,7 @@ def regla_de_tres(partial_calificacion):
         partial_calificacion --> x
     """
     partial_calificacion = (partial_calificacion*10)/4
-    if int(partial_calificacion) >= 10:
+    if int(partial_calificacion) == 10:
         return "10"
     else:
         partial_calificacion = float(partial_calificacion)

@@ -31,6 +31,9 @@
     <br>
     <h2>RESPUESTAS</h2>
     <div>
+        {% if solucion.pregunta_base %}
+            <p>{{ solucion.pregunta_base }}</p>
+        {% endif %}
         {% for item in solucion.examen_result %}
         <div>
             * Pregunta: {{item.0}}
