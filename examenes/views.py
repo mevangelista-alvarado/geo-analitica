@@ -20,7 +20,7 @@ def examen_detail(request, examen_id):
     """"""
     examen_query = Examen.objects.get(id=examen_id)
     preguntas = [pregunta.strip() for pregunta in examen_query.preguntas.split("--")][:-1]
-    if len(preguntas) == 1:
+    if 'tema2' in preguntas:
         template = 'examenes/tema2.html'
         examen = {"tema": "tema 2", "pregunta_base": "", "preguntas": []}
         cuentas_con_calificacion = google_cuentas_tema("tema 2")
