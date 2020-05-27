@@ -48,7 +48,7 @@ def existe_cuenta(cuenta):
 
 def google_cuentas():
     """"""
-    sheet = client.open("Geometria Analitica II").worksheet("Cuentas")
+    sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet("Cuentas")
     cuentas = sheet.col_values(1)
     # Add names to test
     for name in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
@@ -58,7 +58,7 @@ def google_cuentas():
 
 def google_cuentas_tema(tema):
     """"""
-    sheet = client.open("Geometria Analitica II").worksheet(tema)
+    sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet(tema)
     cuentas = sheet.col_values(1)
     return cuentas[1:]
 
@@ -77,7 +77,7 @@ def agregar_calificacion(tema, cuenta, calif, tiempo, preguntas):
         tema = 'test'
 
     try:
-        sheet = client.open("Geometria Analitica II").worksheet(tema)
+        sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet(tema)
         cuentas = sheet.col_values(1)
         ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
         for i in range(1, 25):
