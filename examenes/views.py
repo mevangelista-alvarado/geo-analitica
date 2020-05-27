@@ -18,14 +18,16 @@ def examenes_list(request):
 
 def examen_detail(request, examen_id):
     """"""
-    if examen_id == "3":
+    examen_query = Examen.objects.get(id=examen_id)
+    preguntas = [pregunta.strip() for pregunta in examen_query.preguntas.split("--")][:-1]
+    if len(preguntas) == 1:
         template = 'examenes/tema2.html'
         examen = {"tema": "tema 2", "pregunta_base": "", "preguntas": []}
         cuentas_con_calificacion = google_cuentas_tema("tema 2")
         # Pregunta base
         aa = sympy.sympify(random.randint(1, 10))
         bb = sympy.sympify(random.randint(1, 10))
-        pregunta_base = f'$T(x,y) = ({- aa * bb}y, x + {aa + bb}y)$.'
+        pregunta_base = f'$T(x,y) = ({- aa * bb}y, x + {aa + bb}y)$'
         examen["pregunta_base"] = pregunta_base
         # Preguntas
         matrix_rdn = sympy.Matrix([
@@ -37,15 +39,16 @@ def examen_detail(request, examen_id):
         T2 = f'T(x,y,z) = ({matrix_rdn[2,0]}x + {matrix_rdn[2,1]}y + {matrix_rdn[2,2]}z, {matrix_rdn[1,0]}x + {matrix_rdn[1,1]}y + {matrix_rdn[1,2]}z, {matrix_rdn[0,0]}x + {matrix_rdn[0,1]}y + {matrix_rdn[0,2]}z)'
         T3 = f'T(x,y,z) = ({matrix_rdn[0,0]}x + {matrix_rdn[0,1]}y + {matrix_rdn[0,2]}z, {matrix_rdn[2,0]}x + {matrix_rdn[2,1]}y + {matrix_rdn[2,2]}z, {matrix_rdn[1,0]}x + {matrix_rdn[1,1]}y + {matrix_rdn[1,2]}z)'
         T4 = f'T(x,y,z) = ({matrix_rdn[1,0]}x + {matrix_rdn[1,1]}y + {matrix_rdn[1,2]}z, {matrix_rdn[0,0]}x + {matrix_rdn[0,1]}y + {matrix_rdn[0,2]}z, {matrix_rdn[2,0]}x + {matrix_rdn[2,1]}y + {matrix_rdn[2,2]}z)'
-        options = random_array([T1, T2, T3, T4])
+        T5 = f'T(x,y,z) = ({matrix_rdn[2,0]}x + {matrix_rdn[2,1]}y + {matrix_rdn[2,2]}z, {matrix_rdn[0,0]}x + {matrix_rdn[0,1]}y + {matrix_rdn[0,2]}z, {matrix_rdn[1,0]}x + {matrix_rdn[1,1]}y + {matrix_rdn[1,2]}z)'
+        options = random_array([T1, T2, T3, T4, T5], tamano=5)
         # respuestas
         TT_matriz = sympy.Matrix([[0, - aa * bb], [1, aa + bb]])
         preguntas = [
-            (f'Calcule la matriz de T en la base canónica de $R^2: B = \{{(1,0), (0,1)\}}$', 1, "matrix", [], str(TT_matriz.tolist())),
+            (f'Calcule la matriz de T en la base canónica (ordenada) de $\mathbb{{R}}^2: B = \{{(1,0), (0,1)\}}$', 1, "matrix", [], str(TT_matriz.tolist())),
             (f'Calcule el polinomio característico de $T$', 2, "equation", [], str(TT_matriz.tolist())),
             (f'Calcule los valores propios de $T$', 3, "valores", [], str(TT_matriz.tolist())),
             (f'Calcule los vectores propios de $T$', 4, "vectores", [], str(TT_matriz.tolist())),
-            (f'Escriba la transformación lineal que tiene asociada en la base canónica de $R^3$ la siguiente matriz $${sympy.latex(matrix_rdn)}$$', 5, "opcional", options, T1),
+            (f'Escriba la transformación lineal que tiene asociada en la base canónica de $\mathbb{{R}}^3$, con el orden usual/natural de esta base la siguiente matriz $${sympy.latex(matrix_rdn)}$$', 5, "opcional", options, T1),
         ]
         for pregunta in preguntas:
             examen["preguntas"].append(pregunta)
@@ -173,28 +176,24 @@ def check_examen(request):
             resp4 = ast.literal_eval(request.POST['resp4'])
 
             a_l1_x = sympy.sympify(request.POST.get('4--11', 0))
-            a_l1_y = sympy.sympify(request.POST.get('4--12', 0))
             a_l2_x = sympy.sympify(request.POST.get('4--21', 0))
-            a_l2_y = sympy.sympify(request.POST.get('4--22', 0))
 
             l1_x = TT_matriz.eigenvects()[0][2][0][0,0]
-            l1_y = TT_matriz.eigenvects()[0][2][0][1,0]
             l2_x = TT_matriz.eigenvects()[1][2][0][0,0]
-            l2_y = TT_matriz.eigenvects()[1][2][0][1,0]
 
-            lista_verificacion_4a = [a_l1_x - l1_x, a_l1_y - l1_y, a_l2_x - l2_x, a_l2_y - l2_y]
-            puntaje4a = sympy.Rational(lista_verificacion_4a.count(0), 4)
+            lista_verificacion_4a = [a_l1_x - l1_x, a_l2_x - l2_x]
+            puntaje4a = sympy.Rational(lista_verificacion_4a.count(0), 2)
 
-            lista_verificacion_4b = [a_l2_x - l1_x, a_l2_y - l1_y, a_l1_x - l2_x, a_l1_y - l2_y]
-            puntaje4b = sympy.Rational(lista_verificacion_4b.count(0), 4)
+            lista_verificacion_4b = [a_l2_x - l1_x, a_l1_x - l2_x]
+            puntaje4b = sympy.Rational(lista_verificacion_4b.count(0), 2)
 
             puntaje4 = puntaje4a if puntaje4a > puntaje4b else puntaje4b
             calificacion.append(puntaje4)
-            examen_result.append((preg4, f'$\\vec{{\lambda_1}} = ({l1_x}, {l1_y})$ y $\\vec{{\lambda_2}} = ({l2_x}, {l2_y})$ ó $\\vec{{\lambda_1}} = ({l2_x}, {l2_y})$ y $\\vec{{\lambda_2}} = ({l1_x}, {l1_y})$',
-                                  f'$\\vec{{\lambda_1}} = ({a_l1_x}, {a_l1_y})$ y $\\vec{{\lambda_2}} = ({a_l2_x}, {a_l2_y})$', puntaje4))
+            examen_result.append((preg4, f'$\\vec{{\lambda_1}} = ({l1_x}, 1)$ y $\\vec{{\lambda_2}} = ({l2_x}, 1)$ ó $\\vec{{\lambda_1}} = ({l2_x}, 1)$ y $\\vec{{\lambda_2}} = ({l1_x}, 1)$',
+                                  f'$\\vec{{\lambda_1}} = ({a_l1_x}, 1)$ y $\\vec{{\lambda_2}} = ({a_l2_x}, 1)$', puntaje4))
             google_api_preguntas.append(preg4)
-            google_api_preguntas.append(f'$\\vec{{\lambda_1}} = ({l1_x}, {l1_y})$ y $\\vec{{\lambda_2}} = ({l2_x}, {l2_y})$ ó $\\vec{{\lambda_1}} = ({l2_x}, {l2_y})$ y $\\vec{{\lambda_2}} = ({l1_x}, {l1_y})$')
-            google_api_preguntas.append(f'$\\vec{{\lambda_1}} = ({a_l1_x}, {a_l1_y})$ y $\\vec{{\lambda_2}} = ({a_l2_x}, {a_l2_y})$')
+            google_api_preguntas.append(f'$\\vec{{\lambda_1}} = ({l1_x}, 1)$ y $\\vec{{\lambda_2}} = ({l2_x}, 1)$ ó $\\vec{{\lambda_1}} = ({l2_x}, 1)$ y $\\vec{{\lambda_2}} = ({l1_x}, 1)$')
+            google_api_preguntas.append(f'$\\vec{{\lambda_1}} = ({a_l1_x}, 1)$ y $\\vec{{\lambda_2}} = ({a_l2_x}, 1)$')
             google_api_preguntas.append(puntaje4)
             # Pregunta 5
             preg5 = request.POST['pregunta5']

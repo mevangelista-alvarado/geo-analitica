@@ -5,11 +5,11 @@ import ast
 from .models import ExamenResuelto
 #import re
 
-def random_array(array):
+def random_array(array, tamano=4):
     """"""
-    list_int = [0,1,2,3]
+    list_int = [0,1,2,3] if tamano == 4 else [0,1,2,3,4]
     random.shuffle(list_int)
-    new_array = [0, 0, 0, 0]
+    new_array = [0, 0, 0, 0] if tamano == 4 else [0,0,0,0,0]
     i = 0
     for index in list_int:
         new_array[index] = array[i]

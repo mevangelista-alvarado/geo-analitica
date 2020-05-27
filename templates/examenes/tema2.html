@@ -76,8 +76,8 @@
                         Respuesta:
                         <br>
                         <div>
-                            <input name="{{pregunta.1}}--11" type="text" required>, <input name="{{pregunta.1}}--12" type="text" required> <br>
-                            <input name="{{pregunta.1}}--21" type="text" required>, <input name="{{pregunta.1}}--22" type="text" required>
+                            [<input name="{{pregunta.1}}--11" type="text" required>,  <input name="{{pregunta.1}}--12" type="text" required>] <br>
+                            [<input name="{{pregunta.1}}--21" type="text" required>,  <input name="{{pregunta.1}}--22" type="text" required>]
                          </div>
                     {% elif pregunta.2 == 'equation'%}
                         <!-- Respuesta -->
@@ -96,7 +96,7 @@
                         </div>
                         Repuesta:
                         <br>
-                        $\lambda_1$ = <input name="{{pregunta.1}}--1" type="text" required> y <br>
+                        $\lambda_1$ = <input name="{{pregunta.1}}--1" type="text" required> <br>
                         <br>$\lambda_2$ = <input name="{{pregunta.1}}--2" type="text" required>
                     {% elif pregunta.2 == 'vectores'%}
                         <!-- Respuesta -->
@@ -106,8 +106,8 @@
                         </div>
                         Repuesta:
                         <br>
-                        $\vec{\lambda_1}$ = (<input name="{{pregunta.1}}--11" type="text" required>, <input name="{{pregunta.1}}--12" type="text" required> ) y <br>
-                        <br>$\vec{\lambda_2}$ = (<input name="{{pregunta.1}}--21" type="text" required>, <input name="{{pregunta.1}}--22" type="text" required> )
+                        $\vec{\lambda_1}$ = (<input name="{{pregunta.1}}--11" type="text" required>, 1 ) <br>
+                        <br>$\vec{\lambda_2}$ = (<input name="{{pregunta.1}}--21" type="text" required>, 1 )
                     {% else %}
                         <!-- Respuesta -->
                         <div style="display: none;">

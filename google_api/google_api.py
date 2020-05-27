@@ -38,7 +38,7 @@ def existe_cuenta(cuenta):
     if cuenta in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
         return True
 
-    sheet = client.open("Geometria Analitica II").worksheet("Cuentas")
+    sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet("Cuentas")
     cuentas = sheet.get_all_values()
     cuentas = [str(cuenta)[2:-2] for cuenta in cuentas]
     if cuenta in cuentas:
