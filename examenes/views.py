@@ -11,6 +11,29 @@ from .check import respuesta_correcta_check
 from google_api.google_api import existe_cuenta, google_cuentas, google_cuentas_tema, agregar_calificacion, existe_calificacion
 
 
+def puntaje_P2(e11, e12):
+    # Caso 1
+    if e11 - 1 == 0 and e12 == 0:
+        caso = 1
+        return (1, caso)
+    if e11 - 1 == 0 and e12 != 0:
+        caso = 1
+        return (sympy.Rational(1, 2), caso)
+    if e11 - 1 != 0 and e12 == 0:
+        caso = 1
+        return (sympy.Rational(1, 2), caso)
+    # Caso 2
+    if e11 == 0 and e12 - 1 == 0:
+        caso = 2
+        return (1, caso)
+    if e11 == 0 and e12 - 1 != 0:
+        caso = 2
+        return (sympy.Rational(1, 2), caso)
+    if e11 != 0 and e12 - 1 == 0:
+        caso = 2
+        return (sympy.Rational(1, 2), caso)
+    return (0, 0)
+
 def examenes_list(request):
     """"""
     examenes = Examen.objects.all()
@@ -69,7 +92,7 @@ def examen_detail(request, examen_id):
         b1 = (rr**2 + 1)/sympy.sqrt(rr**2 + 1)
         T1 = f'Rotación por un ángulo mayor que cero y menor que 180 grados'
         T2 = f'Reflexión respecto a una recta que pasa por el origen'
-        T3 = f'Homotecia por un factor positvo'
+        T3 = f'Homotecia por un factor positivo'
         T4 = f'Rotación por un ángulo mayor que 180 y menor que 360 grados'
         T5 = f'Homotecia por un factor negativo'
         options = random_array([T1, T2, T3, T4, T5], tamano=5)
@@ -78,7 +101,7 @@ def examen_detail(request, examen_id):
             (f'Escriba la matriz $P$ de cambio de coordenadas:', 2, "equation", [], str(sympy.Matrix([[(aa - cc)/bb, 0]]).tolist())),
             (f'Escriba la matriz inversa de $P$:', 3, "valores", [], str(sympy.Matrix([[1, 0], [-1, 1]]).tolist())),
             (f'Escriba la forma cuadrática en las nuevas coordenadas:', 4, "vectores", [], str(sympy.Matrix([[aa, cc]]).tolist())),
-            (f'Si una transformación lineal en el plano actúa sobre un vector por $$\\big({sympy.latex(a1)}, {sympy.latex(a1)}\\big) \\to \\big({sympy.latex(b1)}, {sympy.latex(b1)}\\big),$$ entonces se trata de una:', 5, "opcional", options, T3),
+            (f'Si una transformación lineal en el plano actúa sobre un vector por $$\\big(\\frac{{\\sqrt{{ {rr**2 + 1} }} }} {{ {rr**2 + 1} }}, \\frac{{\\sqrt{{ {rr**2 + 1} }} }} {{ {rr**2 + 1} }}\\big) \\to \\big(\\frac{{ {rr**2 + 1} }} {{ \\sqrt{{ {rr**2 + 1} }} }}, \\frac{{ {rr**2 + 1} }} {{ \\sqrt{{ {rr**2 + 1} }} }}\\big),$$ entonces se trata de una:', 5, "opcional", options, T3),
         ]
         for pregunta in preguntas:
             examen["preguntas"].append(pregunta)
@@ -269,11 +292,9 @@ def check_examen(request):
             resp2 = ast.literal_eval(request.POST['resp2'])
             M11 = sympy.sympify(request.POST.get('2--11', 0))
             M12 = sympy.sympify(request.POST.get('2--12', 0))
-            lista_verificacion_2 = [resp2[0][0] - M11, resp2[0][1] - M12]
-            puntaje2 = sympy.Rational(lista_verificacion_2.count(0), 2)
-            if puntaje2.is_zero:
-                lista_verificacion_2 = [resp2[0][1] - M11, resp2[0][0] - M12]
-                puntaje2 = sympy.Rational(lista_verificacion_2.count(0), 2)
+            # Caso 1
+            puntaje2, CASO = puntaje_P2(M11, M12)
+            print(CASO)
             matrix_alumno = sympy.Matrix([[M11, M12], [1, 1]])
             TT_matriz_a = sympy.Matrix([[resp2[0][0], resp2[0][1]],[1,1]])
             TT_matriz_b = sympy.Matrix([[resp2[0][1], resp2[0][0]], [1,1]])
@@ -293,10 +314,15 @@ def check_examen(request):
             M12 = sympy.sympify(request.POST.get('3--12', 0))
             M21 = sympy.sympify(request.POST.get('3--21', 0))
             M22 = sympy.sympify(request.POST.get('3--22', 0))
-            lista_verificacion_3 = [resp3[0][0] - M11, resp3[0][1] - M12, resp3[1][0] - M21, resp3[1][1] - M22]
-            puntaje3 = sympy.Rational(lista_verificacion_3.count(0), 4)
-            if puntaje3.is_zero:
-                lista_verificacion_3 = [resp3[1][0] - M11, resp3[1][1] - M12, resp3[0][0] - M21, resp3[0][1] - M22]
+            print('Pregunat 3')
+            print(CASO)
+            if CASO == 0:
+                puntaje3 = 0
+            if CASO == 1:
+                lista_verificacion_3 = [1 - M11, M12, -1 - M21, 1 - M22]
+                puntaje3 = sympy.Rational(lista_verificacion_3.count(0), 4)
+            if CASO == 2:
+                lista_verificacion_3 = [-1 - M11, 1 - M12, 1 - M21, M22]
                 puntaje3 = sympy.Rational(lista_verificacion_3.count(0), 4)
             matrix_alumno = sympy.Matrix([[M11, M12], [M21, M22]])
             TT_matriz_a = sympy.Matrix([resp3[0], resp3[1]])
@@ -316,10 +342,13 @@ def check_examen(request):
             resp4_cc = sympy.sympify(resp4[0][1])
             a_x = sympy.sympify(request.POST.get('4--x', 0))
             a_y = sympy.sympify(request.POST.get('4--y', 0))
-            lista_verificacion_4 = [a_x - resp4_aa, a_y - resp4_cc]
-            puntaje4 = sympy.Rational(lista_verificacion_4.count(0), 2)
-            if puntaje4.is_zero:
-                lista_verificacion_4 = [a_y - resp4_aa, a_x - resp4_cc]
+            if CASO == 0:
+                puntaje4 = 0
+            if CASO == 1:
+                lista_verificacion_4 = [resp4_aa - a_x, resp4_cc - a_y]
+                puntaje4 = sympy.Rational(lista_verificacion_4.count(0), 2)
+            if CASO == 2:
+                lista_verificacion_4 = [resp4_cc - a_x, resp4_aa - a_y]
                 puntaje4 = sympy.Rational(lista_verificacion_4.count(0), 2)
             calificacion.append(puntaje4)
             examen_result.append((preg4, f'${resp4_aa}x^2 + ({resp4_cc})y^2$ ó ${resp4_cc}x^2 + ({resp4_aa})y^2$',
