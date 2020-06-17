@@ -75,7 +75,7 @@ def examen_detail(request, examen_id):
         ]
         for pregunta in preguntas:
             examen["preguntas"].append(pregunta)
-    if 'tema3' in preguntas:
+    elif 'tema3' in preguntas:
         template = 'examenes/tema3.html'
         examen = {"tema": "tema 3", "preguntas": []}
         cuentas_con_calificacion = google_cuentas_tema("tema 3")
