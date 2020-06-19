@@ -29,12 +29,12 @@
     <h2>Examenes</h2>
     {% for examen in examenes %}
         <div>
-            <h2><a href="{% url 'detail' examen.id %}"> {{ examen.tema }}</a></h2>
+            <h3><a href="{% url 'detail' examen.id %}"> {{ examen.tema }}</a></h3>
         </div>
     {% endfor %}
     <br>
     <div>
-        <h4><a href="{% url 'credits' %}">Créditos</a></h4>
+        <h3><a href="{% url 'credits' %}">Créditos</a></h3>
     </div>
     <br>
 {% endblock %}
