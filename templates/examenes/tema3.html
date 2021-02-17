@@ -1,0 +1,131 @@
+{% extends 'examenes/base.html' %}
+<head>
+    <link rel="stylesheet" type="text/css" href="css/site.css" />
+    <script type="text/javascript" src="js/cssrefresh.js"></script>
+</head>
+{% block content %}
+    <div style="font-size:140%">
+        <h1>Geometría Analítica</h1>
+    </div>
+    <div id="examen_tiempo" class="center" style="visibility:hidden;">
+        <!--<FONT SIZE=5> TIEMPO </font>-->
+        <FONT SIZE=7 id="cronometro">00 : 00 : 00</font>
+    </div>
+
+    <div id="tiempo_regresivo" class="center" >
+        El examen comenzará en: <h2 style="color:yellow;"><span id="cuentaRegresiva"></span></h2>
+    </div>
+    <div style="font-size:140%">
+        <h3>Indicaciones Generales</h3>
+        <ol>
+            <li>Tener a la mano tu <strong>Número de Cuenta.</strong></li>
+            <li>Tienes 75 minutos para resolver 5 problemas sencillos.</li>
+            <!-- <li>Después de los 50 minutos la página se actuliza generando un nuevo examen.</li> -->
+            <li>No dejar casillas vacías.</li>
+            <li>Una vez enviado el Quiz no podrás realizar modificaciones.</li>
+            <li>No utilizar aproximaciones decimales en tus cálculos.</li>
+        </ol>
+        <h3>Sintaxis</h3>
+        <ol>
+            <li>Para ingresar un producto, por ejemplo, $(2)(3)=2\times 3=2\cdot 3$, debes escribir lo siguiente: 2*3 ó 3*2 (sintaxis de python).</li>
+            <li>Para ingresar un número negativo, por ejemplo, $-4 = (-1)(4) = -1\cdot 4$, debes escribir lo siguiente: -4 ó -1*4 ó (-1)*4 (sintaxis de python).</li>
+            <li>Para ingresar una fracción, por ejemplo, $\frac{1}{2}$, debes escribir lo siguiente: 1/2 (sintaxis de python).</li>
+            <li>Para ingresar una raíz cuadrada, por ejemplo, $\sqrt{2}$, debes escribir lo siguiente: sqrt(2) (sintaxis de python).</li>
+            <li>Puedes utilizar cualquier combinación válida de todas las anteriores</li>
+            <!--<li>Si necesitas ingresar funciones especiales(trigonométricas) recuerda hacer lo siguiente: $cos(4)$ = cos(4), $sen(4)$ = sin(4) o $\sqrt{2}$ = sqrt(2) por ejemplo.</li>
+            <li> Para números, funciones o fracciones negativas son válidas las siguientes opciones:
+            $\sqrt{2}$ = -sqrt(2), $\sqrt{2}$ = -1*sqrt(2) o $-\frac{1}{\sqrt{2}}$ = -1/sqrt(2).</li>-->
+        </ol>
+    </div>
+    <form id="formEjemplo" method='POST' action="{% url 'check_examen' %}" >
+        {% csrf_token %}
+        <div style="display: none;">
+            <input id="cronometro_form" name="tiempo" type="text" >
+            <input name="tema" type="text" value="{{examen.tema}}">{{ examen.tema }}
+            <input name="pregunta_base" type="text" value="Considere la transformación lineal en $R^2$ dada por {{ examen.pregunta_base }}">
+        </div>
+        <div class="left" style="font-size:140%">
+            <h2>{{ examen.tema }}</h2>
+        </div>
+        <p></p>
+        <div style="font-size:140%">
+            {% for pregunta in examen.preguntas %}
+                <p>Pregunta {{ pregunta.1 }}: {{ pregunta.0 }}</p>
+                {% if pregunta.2 == 'matrix'%}
+                    <!-- Respuesta -->
+                    <div style="display: none;">
+                        <input name="resp{{ pregunta.1}}" type="text" value="{{ pregunta.4 }}">
+                        <input name="pregunta{{ pregunta.1}}" type="text" value="{{ pregunta.0 }}">
+                    </div>
+                    Respuesta:
+                    <br>
+                    <div>
+                        [<input name="{{pregunta.1}}--11" type="text" required>,  <input name="{{pregunta.1}}--12" type="text" required>] <br>
+                        [<input name="{{pregunta.1}}--21" type="text" required>,  <input name="{{pregunta.1}}--22" type="text" required>]
+                     </div>
+                {% elif pregunta.2 == 'equation'%}
+                    <!-- Respuesta -->
+                    <div style="display: none;">
+                        <input name="resp{{ pregunta.1}}" type="text" value="{{ pregunta.4 }}">
+                        <input name="pregunta{{ pregunta.1}}" type="text" value="{{ pregunta.0 }}">
+                    </div>
+                    Repuesta:
+                    <br>
+                    <div>
+                        [<input name="{{pregunta.1}}--11" type="text" required>,  <input name="{{pregunta.1}}--12" type="text" required>] <br>
+                        [<input name="{{pregunta.1}}--21" type="text" disabled="disabled"  value="1">,  <input name="{{pregunta.1}}--22" type="text" disabled="disabled" value="1">]
+                     </div>
+                {% elif pregunta.2 == 'valores'%}
+                    <!-- Respuesta -->
+                    <div style="display: none;">
+                        <input name="resp{{ pregunta.1}}" type="text" value="{{ pregunta.4 }}">
+                        <input name="pregunta{{ pregunta.1}}" type="text" value="{{ pregunta.0 }}">
+                    </div>
+                    Repuesta:
+                    <div>
+                        [<input name="{{pregunta.1}}--11" type="text" required>,  <input name="{{pregunta.1}}--12" type="text" required>] <br>
+                        [<input name="{{pregunta.1}}--21" type="text" required>,  <input name="{{pregunta.1}}--22" type="text" required>]
+                     </div>
+                {% elif pregunta.2 == 'vectores'%}
+                    <!-- Respuesta -->
+                    <div style="display: none;">
+                        <input name="resp{{ pregunta.1}}" type="text" value="{{ pregunta.4 }}">
+                        <input name="pregunta{{ pregunta.1}}" type="text" value="{{ pregunta.0 }}">
+                    </div>
+                    Repuesta:
+                    <br>
+                    <input name="{{pregunta.1}}--x" type="text" required>  $x'^2$ + <input name="{{pregunta.1}}--y" type="text" required>  $y'^2$
+                {% else %}
+                    <!-- Respuesta -->
+                    <div style="display: none;">
+                        <input name="resp{{ pregunta.1}}" type="text" value="{{ pregunta.4 }}">
+                        <input name="pregunta{{ pregunta.1}}" type="text" value="{{ pregunta.0 }}">
+                    </div>
+                    {% for respuesta in pregunta.3 %}
+                        <label for="{{ pregunta.1 }}"></label>
+                        <input name="{{ pregunta.1 }}" type="radio" value="{{ respuesta }}">{{ respuesta }}
+                        <br>
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <p></p>
+        <br>
+        <br>
+        <div style="font-size:140%">
+            Numero de cuenta: <input id="cta_unam" name="numero_cuenta" type="text" required>
+            <p id="mensaje_cta"></p>
+        </div>
+        <p></p>
+        <div style="font-size:140%">
+            <button id="enviar_examen" type="button" class="save btn btn-default">Enviar Examen</button>
+        </div>
+    </form>
+
+    <div>
+        <h3><a href="/">Regresar</a></h3>
+    </div>
+    {% include "examenes/detail_js.html" %}
+{% endblock %}
+

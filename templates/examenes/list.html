@@ -8,7 +8,7 @@
         <h3>Indicaciones Generales</h3>
         <ol>
             <li>Tener a la mano tu <strong>Número de Cuenta.</strong></li>
-            <li>Tienes 50 minutos para resolver 5 problemas sencillos.</li>
+            <li>Tienes 75 minutos para resolver 5 problemas sencillos.</li>
             <!-- <li>Después de los 50 minutos la página se actuliza generando un nuevo examen.</li> -->
             <li>No dejar casillas vacías.</li>
             <li>Una vez enviado el Quiz no podrás realizar modificaciones.</li>
@@ -29,12 +29,12 @@
     <h2>Examenes</h2>
     {% for examen in examenes %}
         <div>
-            <h2><a href="{% url 'detail' examen.id %}"> {{ examen.tema }}</a></h2>
+            <h3><a href="{% url 'detail' examen.id %}"> {{ examen.tema }}</a></h3>
         </div>
     {% endfor %}
     <br>
     <div>
-        <h4><a href="{% url 'credits' %}">Créditos</a></h4>
+        <h3><a href="{% url 'credits' %}">Créditos</a></h3>
     </div>
     <br>
 {% endblock %}

@@ -38,7 +38,7 @@ def existe_cuenta(cuenta):
     if cuenta in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
         return True
 
-    sheet = client.open("Geometria Analitica II").worksheet("Cuentas")
+    sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet("Cuentas")
     cuentas = sheet.get_all_values()
     cuentas = [str(cuenta)[2:-2] for cuenta in cuentas]
     if cuenta in cuentas:
@@ -48,7 +48,7 @@ def existe_cuenta(cuenta):
 
 def google_cuentas():
     """"""
-    sheet = client.open("Geometria Analitica II").worksheet("Cuentas")
+    sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet("Cuentas")
     cuentas = sheet.col_values(1)
     # Add names to test
     for name in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
@@ -58,7 +58,7 @@ def google_cuentas():
 
 def google_cuentas_tema(tema):
     """"""
-    sheet = client.open("Geometria Analitica II").worksheet(tema)
+    sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet(tema)
     cuentas = sheet.col_values(1)
     return cuentas[1:]
 
@@ -76,24 +76,28 @@ def agregar_calificacion(tema, cuenta, calif, tiempo, preguntas):
     if cuenta in ['miguel', 'pablo', 'panta', 'haydee', 'fernanda']:
         tema = 'test'
 
-    sheet = client.open("Geometria Analitica II").worksheet(tema)
-    cuentas = sheet.col_values(1)
-    ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
-    for i in range(1, 25):
-        if i == 1:
-            # Cuenta
-            sheet.update_cell(ctas_ultima_posicion + 2, i, cuenta)
-        elif i == 2:
-            # Calificacion
-            sheet.update_cell(ctas_ultima_posicion + 2, i, str(calif))
-        elif i == 3:
-            # Fecha
-            date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-            sheet.update_cell(ctas_ultima_posicion + 2, i, date)
-        elif i == 4:
-            # Tiempo
-            sheet.update_cell(ctas_ultima_posicion + 2, i, str(tiempo))
-        else:
-            index = i - 5
-            # Preguntas
-            sheet.update_cell(ctas_ultima_posicion + 2, i, str(preguntas[index]))
+    try:
+        sheet = client.open(settings.GOOGLE_SHEET_NAME).worksheet(tema)
+        cuentas = sheet.col_values(1)
+        ctas_ultima_posicion = len(cuentas[1:]) # Quitamos cabezeras
+        for i in range(1, 25):
+            if i == 1:
+                # Cuenta
+                sheet.update_cell(ctas_ultima_posicion + 2, i, cuenta)
+            elif i == 2:
+                # Calificacion
+                sheet.update_cell(ctas_ultima_posicion + 2, i, str(calif))
+            elif i == 3:
+                # Fecha
+                date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                sheet.update_cell(ctas_ultima_posicion + 2, i, date)
+            elif i == 4:
+                # Tiempo
+                sheet.update_cell(ctas_ultima_posicion + 2, i, str(tiempo))
+            else:
+                index = i - 5
+                # Preguntas
+                sheet.update_cell(ctas_ultima_posicion + 2, i, str(preguntas[index]))
+        return (True, f'[INFO] Calificación agregada exitosamente a la cuenta {cuenta}')
+    except Exception as e:
+        return (False, f'[ERROR] Al agregar calificación a la cuenta {cuenta}, ERROR: {e}')

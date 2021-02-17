@@ -1,13 +1,15 @@
 import random
 import sympy
+import datetime
 import ast
+from .models import ExamenResuelto
 #import re
 
-def random_array(array):
+def random_array(array, tamano=4):
     """"""
-    list_int = [0,1,2,3]
+    list_int = [0,1,2,3] if tamano == 4 else [0,1,2,3,4]
     random.shuffle(list_int)
-    new_array = [0, 0, 0, 0]
+    new_array = [0, 0, 0, 0] if tamano == 4 else [0,0,0,0,0]
     i = 0
     for index in list_int:
         new_array[index] = array[i]
@@ -42,7 +44,6 @@ def regla_de_tres(partial_calificacion):
         return f"{partial_calificacion:.2f}"
 
 
-
 # Funciones para crear una pregunta aleatoria
 def replace_random_int(pregunta, str_to_change='random'):
     """"""
@@ -74,7 +75,7 @@ def plano_tangente(pregunta, dependiente='dependiente'):
     constante = sympy.sympify(3)
 
     x0, y0 = sympy.sympify(random.randint(1, 5)), sympy.sympify(random.randint(1, 5))
-    dentro_raiz = constante - x0**2/a**2 - y0**2/c**2
+    dentro_raiz = constante - x0**2/a**2 - y0**2/b**2
     while dentro_raiz < 0:
         x0, y0 = sympy.sympify(random.randint(1, 5)), sympy.sympify(random.randint(1, 5))
         dentro_raiz = constante - x0**2/a**2 - y0**2/b**2
@@ -250,7 +251,7 @@ def superficies_regladas_opcional():
 
 def plano_tangente_opcional():
     """"""
-    return ["Respuesta: 0 = x", "+ y", "+ z", "+"], False
+    return ["Respuesta:", "x +", "y +", "z +", "= 0",], False
 
 def quiz_1_options():
     """"""
@@ -294,7 +295,7 @@ def custom_plano_tangente_html(array):
     z = sympy.latex(sympy.sympify(array[2]))
     c = sympy.latex(sympy.sympify(array[3]))
 
-    return f'$({x})x +({y})y +({z})z +({c})= 0$'
+    return f'$({x})x +({y})y +({z})z +({c}) = 0$'
 
 def custom_quiz1_respuesta_html(array):
     """"""
@@ -321,3 +322,39 @@ custom_alumno_respuesta = {
     "ecuacion2": custom_quiz2_respuesta_html,
 }
 
+# Django method
+def save_examen_resuelto(tema, cuenta, calif, tiempo, preguntas, status):
+    """"""
+    try:
+        date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        #
+        Examen = ExamenResuelto()
+        Examen.tema = tema
+        Examen.numero_cuenta = cuenta
+        Examen.tiempo = date
+        Examen.status_gsheet = str(status)
+        Examen.calificacion = str(calif)
+        Examen.pregunta1 = str(preguntas[0])
+        Examen.respuesta1_correcta = str(preguntas[1])
+        Examen.respuesta1_alumno = str(preguntas[2])
+        Examen.respuesta1_calif = str(preguntas[3])
+        Examen.pregunta2 = str(preguntas[4])
+        Examen.respuesta2_correcta = str(preguntas[5])
+        Examen.respuesta2_alumno = str(preguntas[6])
+        Examen.respuesta2_calif = str(preguntas[7])
+        Examen.pregunta3 = str(preguntas[8])
+        Examen.respuesta3_correcta = str(preguntas[9])
+        Examen.respuesta3_alumno = str(preguntas[10])
+        Examen.respuesta3_calif = str(preguntas[11])
+        Examen.pregunta4 = str(preguntas[12])
+        Examen.respuesta4_correcta = str(preguntas[13])
+        Examen.respuesta4_alumno = str(preguntas[14])
+        Examen.respuesta4_calif = str(preguntas[15])
+        Examen.pregunta5 = str(preguntas[16])
+        Examen.respuesta5_correcta = str(preguntas[17])
+        Examen.respuesta5_alumno = str(preguntas[18])
+        Examen.respuesta5_calif = str(preguntas[19])
+        Examen.save()
+        return (True, f'[INFO] Calificación guardada en la Base de Datos exitosamente a la cuenta {cuenta}')
+    except Exception as e:
+        return (False, f'[ERROR] Al guardar calificación en la Base de Datos a la cuenta {cuenta}, ERROR: {e}')

@@ -3,9 +3,23 @@
 {% block content %}
     {% if existe_cuenta %}
         <h2>EXAMEN REVISADO EXITOSAMENTE</h2>
+        <div>
+            Estatus:<br>
+            {% if save_examen %}
+                <br>Guardado Correctamente.<br>
+            {% endif %}
+            {% if response %}
+                <br>Enviado Correctamente.<br>
+            {% endif %}
+        </div>
         <div style="font-size: 18px;">
             <h2>La calificación {{ calificacion_final }} fue asignada al número de cuenta: {{ numero_cuenta }}.</h2>
-            <p><strong>NOTA:</strong> Si crees necesario, favor de tomar una captura de pantalla para posibles aclaraciones.</p>
+            <p><strong>NOTA:</strong>
+            <ul>
+                <li>Si el estatus del examen <strong>NO</strong> es Guardado Correctamente y/o Enviado Correctamente, por favor informa a tu profesor y toma una captura de pantalla.</li>
+                <li>Si crees necesario, favor de tomar una captura de pantalla para posibles aclaraciones.</li>
+            </ul>
+            </p>
         </div>
 
     {% else %}
@@ -17,6 +31,9 @@
     <br>
     <h2>RESPUESTAS</h2>
     <div>
+        {% if solucion.pregunta_base %}
+            <p>{{ solucion.pregunta_base }}</p>
+        {% endif %}
         {% for item in solucion.examen_result %}
         <div>
             * Pregunta: {{item.0}}
